@@ -2,56 +2,46 @@ import React, { useRef } from "react";
 import { Usecustum } from "../Context";
 function Drag(){
     const data = Usecustum()
-    const dragitem = useRef()
-    const draged = useRef()
+    const [order, setOrder] = React.useState(data);
     const [drag,dragup] = React.useState(false)
-    const [datas,datasup] =React.useState(data)
-    function handleDrag(e,para){
-        dragitem.current = para;
-        draged.current = e.target;
-        draged.current.addEventListener('dragend',handleDraged)
-        setTimeout(() => {
-            dragup(true); 
-        },0)    
-    }
-    
-    const handleDraged=()=>{
-        draged.current.removeEventListener('dragend',handleDraged)
-        dragup(false)
-    }
-    function handleDragEnter(e,paras){
-        if(e.target!==draged.current){
-            console.log('not the same')
-            datasup( (olddata)=>{
 
-                let newData = JSON.parse(JSON.stringify(olddata))
-                console.log(newData)
-                newData[paras.grpI].items.splice(paras.membersI,0,newData[dragitem.current.grpI].items.splice(dragitem.current.membersI,1)[0])
-                dragitem.current = paras
-                localStorage.setItem('datas', JSON.stringify(newData));
+    const onDragStart = (grpI, membersI, event) => {
+        dragup(true)
+        event.dataTransfer.setData("grpI", grpI);
+        event.dataTransfer.setData("membersI", membersI);
+    };
 
-                return newData;
-            }
-            )
-        }
+    const onDrop = (grpI, membersI, event) => {
+        const sourcegrpI = event.dataTransfer.getData("grpI");
+        const sourcemembersI = event.dataTransfer.getData("membersI");
+
+        const sourceGroup = order[sourcegrpI];
+        const targetGroup = order[grpI];
+
+        const [draggedItem] = sourceGroup.items.splice(sourcemembersI, 1);
+        targetGroup.items.splice(membersI, 0, draggedItem);
+
+        setOrder([...order]);
 
     }
     
     return(
         <div>
 
-        <div className='all' >
+        <div className='all'  dra>
             {data.map((grp,grpI)=>{
                 return(
-                    <div className='units' draggable >
-                        <div  className='title' key={grpI}>
+                    <div className='units'  draggable>
+                        <div  className='title' key={grpI} >
                             {grp.title}
                         </div>
                         <div> {grp.items.map((members,membersI)=>{
                         return(
                             <div className='members' key={membersI} 
-                            draggable onDragStart={(e)=>handleDrag(e,{grpI,membersI})}
-                            onDragEnter={drag?(e)=>{handleDragEnter(e,{grpI,membersI})}:null}>{members}</div>/////
+                            draggable
+                            onDragStart={(event) => onDragStart(grpI, membersI, event)}
+                            onDrop={(event) => onDrop(grpI, membersI, event)}
+                            onDragOver={(event) => event.preventDefault()}>{members}</div>/////
                         )})}
                         </div>
                     </div>
