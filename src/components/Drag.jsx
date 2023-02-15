@@ -25,6 +25,7 @@ function Drag(){
 
     }
     
+    
     return(
         <div>
 
@@ -37,7 +38,7 @@ function Drag(){
                         </div>
                         <div> {grp.items.map((members,membersI)=>{
                         return(
-                            <div className='members' key={membersI} 
+                            <div className="members" key={membersI} 
                             draggable
                             onDragStart={(event) => onDragStart(grpI, membersI, event)}
                             onDrop={(event) => onDrop(grpI, membersI, event)}

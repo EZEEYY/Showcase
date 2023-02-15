@@ -39,3 +39,16 @@
 
 
 }
+.current{
+  background-color: rgb(222, 222, 213) ;
+}
+body {
+  background-color: #f7f7f7;
+  color: #333;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark-mode {
+  background-color: #333;
+  color: #f7f7f7;
+}

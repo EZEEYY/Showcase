@@ -4,11 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from './Context';
+import LocalStorageExample from './components/LocalStorageExample';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider>
-
+      <LocalStorageExample/>
       <App/>
     </Provider>
   </React.StrictMode>
